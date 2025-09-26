@@ -2,8 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: black;
-  color: #39ff14; /* neon green */
-  font-family: monospace;
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  /* CRT / glitch text effect */
+  .glitch {
+    position: relative;
+    color: #00ff88;
+    text-shadow: 2px 2px #ff00de, -2px -2px #00eaff;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    clip: rect(0, 900px, 0, 0);
+  }
+  .glitch::before {
+    animation: glitchTop 1s infinite linear alternate-reverse;
+    color: #ff00de;
+  }
+  .glitch::after {
+    animation: glitchBottom 1s infinite linear alternate-reverse;
+    color: #00eaff;
+  }
+
+  @keyframes glitchTop {
+    0% { clip: rect(0, 9999px, 0, 0); }
+    50% { clip: rect(0, 9999px, 10px, 0); transform: translate(-5px, -5px); }
+    100% { clip: rect(0, 9999px, 0, 0); }
+  }
+
+  @keyframes glitchBottom {
+    0% { clip: rect(0, 9999px, 0, 0); }
+    50% { clip: rect(5px, 9999px, 9999px, 0); transform: translate(5px, 5px); }
+    100% { clip: rect(0, 9999px, 0, 0); }
+  }
 }

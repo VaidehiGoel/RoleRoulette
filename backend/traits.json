@@ -1,6 +1,6 @@
 {
-  "age": ["19", "34", "53", "72"],
-  "job": ["beekeeper", "retired clown", "AI ethicist", "skateboarder"],
-  "personality": ["pessimistic", "overly optimistic", "always whispering", "paranoid"],
-  "quirk": ["afraid of pigeons", "collects broken phones", "laughs randomly", "never sleeps"]
+  "personality": ["shy", "outgoing", "funny", "serious", "adventurous"],
+  "profession": ["doctor", "artist", "coder", "teacher", "chef"],
+  "hobby": ["painting", "gaming", "hiking", "cooking", "reading"],
+  "quirk": ["always late", "talks too much", "loves cats", "hates coffee"]
 }

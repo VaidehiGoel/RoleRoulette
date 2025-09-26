@@ -1,34 +1,47 @@
 import { useState } from "react";
-import IdentityCard from "./components/IdentityCard";
-import ChatRoom from "./components/ChatRoom";
+import IdentityCard from "./identityCard";
 
 function App() {
   const [identity, setIdentity] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const generateIdentity = async () => {
-    const res = await fetch("http://localhost:5000/generate");
-    const data = await res.json();
-    setIdentity(data);
+  const handleGenerate = async () => {
+    setLoading(true);
+    setIdentity(null); // reset before fetching new one
+    try {
+      const res = await fetch("/api/generate");
+      const data = await res.json();
+
+      // Simulate a small delay for animation effect
+      setTimeout(() => {
+        setIdentity(data);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      console.error("Error fetching identity:", err);
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-6">
-      {!identity ? (
-        <div className="text-center">
-          <h1 className="text-2xl mb-4">Who will you be today?</h1>
-          <button
-            onClick={generateIdentity}
-            className="px-4 py-2 bg-green-500 text-black font-bold rounded"
-          >
-            Generate Me
-          </button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 font-mono">
+      <h1 className="text-5xl font-bold mb-6 tracking-widest glitch">
+        Role Roulette
+      </h1>
+      <button
+        onClick={handleGenerate}
+        className="px-8 py-3 bg-green-600 text-black font-bold rounded-lg shadow-lg hover:bg-green-500 active:scale-95 transition-transform"
+      >
+        Generate Me
+      </button>
+
+      {loading && (
+        <div className="mt-8 animate-pulse text-green-500">
+          Generating your role...
         </div>
-      ) : (
-        <>
-          <IdentityCard identity={identity} />
-          <ChatRoom identity={identity} />
-        </>
       )}
+
+      {identity && <IdentityCard identity={identity} />}
     </div>
   );
 }
