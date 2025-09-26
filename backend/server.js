@@ -36,3 +36,9 @@ io.on("connection", (socket) => {
 });
 
 server.listen(5000, () => console.log("Backend running on http://localhost:5000"));
+
+// Simple root route (just for testing backend is working)
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
+
