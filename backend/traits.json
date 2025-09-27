@@ -1,42 +1,87 @@
 {
-  "hackerNames": [
-    "Shadow_Hacker_23",
-    "PixelWizard88",
-    "CyberFox_001",
-    "NeonSamurai77",
-    "GlitchGhost42",
-    "ByteBanditX",
-    "ZeroDayPhantom",
-    "MatrixSpecter",
-    "Echo404",
-    "RootReaper"
+  "names": [
+    "CyberPhantom",
+    "NeonGhost",
+    "DigitalNomad",
+    "CodeBreaker",
+    "PixelDrifter",
+    "NetRunner",
+    "DataMancer",
+    "VoidWalker",
+    "ChromaHack",
+    "QuantumShade",
+    "NeuralLink",
+    "BinaryWolf",
+    "CryptoSage",
+    "MatrixDancer",
+    "ElectroMind",
+    "SyntheticSoul",
+    "HoloGlitch",
+    "CyberNinja",
+    "DigitalSpecter",
+    "NeonRider"
   ],
-  "personality": [
-    "Calm strategist",
-    "Chaotic trickster",
-    "Silent observer",
-    "Optimistic dreamer",
-    "Cunning manipulator"
+  "professions": [
+    "Cybersecurity Analyst",
+    "Digital Artist",
+    "Data Scientist",
+    "Blockchain Developer",
+    "AI Researcher",
+    "Virtual Reality Designer",
+    "Quantum Computing Specialist",
+    "Biohacker",
+    "Neural Network Engineer",
+    "Cryptocurrency Trader",
+    "Augmented Reality Developer",
+    "Digital Forensics Expert",
+    "IoT Security Specialist",
+    "Machine Learning Engineer",
+    "Robotics Engineer",
+    "Digital Nomad",
+    "Tech Journalist",
+    "Startup Founder",
+    "Open Source Contributor",
+    "Privacy Advocate"
   ],
-  "profession": [
-    "Street coder",
-    "Neon samurai",
-    "AI wrangler",
-    "Corporate spy",
-    "Digital nomad"
+  "personalities": [
+    "Mysterious",
+    "Rebellious",
+    "Tech-savvy",
+    "Enigmatic",
+    "Analytical",
+    "Creative",
+    "Paranoid",
+    "Optimistic",
+    "Cynical",
+    "Adventurous",
+    "Introverted",
+    "Charismatic",
+    "Methodical",
+    "Impulsive",
+    "Philosophical",
+    "Pragmatic",
+    "Idealistic",
+    "Skeptical",
+    "Innovative",
+    "Eccentric"
   ],
-  "hobby": [
-    "Speedrunning games",
-    "Tinkering with circuits",
-    "Urban exploring",
-    "Collecting glitches",
-    "Synthwave DJing"
-  ],
-  "quirk": [
-    "Types only in lowercase",
-    "Always wears mirrored shades",
-    "Quotes old sci-fi movies",
-    "Never reveals their real timezone",
-    "Believes every error is a hidden message"
+  "backgrounds": [
+    "A shadow in the digital realm, navigating endless streams of data",
+    "Lost in the matrix of code, searching for digital enlightenment",
+    "Former corporate drone who broke free into the underground tech scene",
+    "Grew up in the neon-lit streets, raised by algorithms and electric dreams",
+    "A digital archaeologist uncovering secrets buried in forgotten databases",
+    "Escaped from a tech dystopia, now fights for digital freedom",
+    "Born in cyberspace, more comfortable in virtual worlds than reality",
+    "A reformed black hat hacker turned digital vigilante",
+    "Wanderer between worlds, collecting stories from the information superhighway",
+    "Child of the internet age, fluent in binary and human emotions",
+    "Underground artist painting with pixels and disrupting corporate networks",
+    "Former AI trainer who discovered consciousness in the machines",
+    "Digital detective solving crimes that exist only in virtual space",
+    "Cybernetic philosopher questioning the nature of digital existence",
+    "Escaped from a simulation, now helps others see through the code"
   ]
 }
+
+
