@@ -1,6 +1,42 @@
 {
-  "personality": ["shy", "outgoing", "funny", "serious", "adventurous"],
-  "profession": ["doctor", "artist", "coder", "teacher", "chef"],
-  "hobby": ["painting", "gaming", "hiking", "cooking", "reading"],
-  "quirk": ["always late", "talks too much", "loves cats", "hates coffee"]
+  "hackerNames": [
+    "Shadow_Hacker_23",
+    "PixelWizard88",
+    "CyberFox_001",
+    "NeonSamurai77",
+    "GlitchGhost42",
+    "ByteBanditX",
+    "ZeroDayPhantom",
+    "MatrixSpecter",
+    "Echo404",
+    "RootReaper"
+  ],
+  "personality": [
+    "Calm strategist",
+    "Chaotic trickster",
+    "Silent observer",
+    "Optimistic dreamer",
+    "Cunning manipulator"
+  ],
+  "profession": [
+    "Street coder",
+    "Neon samurai",
+    "AI wrangler",
+    "Corporate spy",
+    "Digital nomad"
+  ],
+  "hobby": [
+    "Speedrunning games",
+    "Tinkering with circuits",
+    "Urban exploring",
+    "Collecting glitches",
+    "Synthwave DJing"
+  ],
+  "quirk": [
+    "Types only in lowercase",
+    "Always wears mirrored shades",
+    "Quotes old sci-fi movies",
+    "Never reveals their real timezone",
+    "Believes every error is a hidden message"
+  ]
 }

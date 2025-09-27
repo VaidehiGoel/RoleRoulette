@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-// Load traits.json
+// Load traits.json (make sure this file exists in backend/)
 const traits = JSON.parse(fs.readFileSync("./traits.json", "utf-8"));
 
 // Helper → pick random item
@@ -25,6 +25,7 @@ function getRandom(arr) {
 app.get("/api/generate", (req, res) => {
   const identity = {
     id: Date.now(),
+    hackerName: getRandom(traits.hackerNames),   // ✅ added hackerNames
     personality: getRandom(traits.personality),
     profession: getRandom(traits.profession),
     hobby: getRandom(traits.hobby),
