@@ -28,11 +28,13 @@ try {
 } catch (error) {
   console.error('Error loading traits.json:', error);
   traitsData = {
-    names: ['CyberPhantom', 'NeonGhost', 'DigitalNomad', 'CodeBreaker'],
-    professions: ['Hacker', 'Digital Artist', 'Data Analyst', 'Cyber Security'],
-    personalities: ['Mysterious', 'Rebellious', 'Tech-savvy', 'Enigmatic'],
-    backgrounds: ['A shadow in the digital realm', 'Lost in the matrix of code']
-  };
+  names: ['Alex_Thompson', 'Sarah_Martinez', 'Mike_Johnson', 'Emma_Davis'],
+  professions: ['Teacher', 'Designer', 'Developer', 'Nurse'],
+  hobbies: ['Reading', 'Gaming', 'Cooking', 'Hiking'],
+  quirks: ['Always wears mismatched socks', 'Talks to plants', 'Hums while working'],
+  secrets: ['Still sleeps with a nightlight', 'Afraid of butterflies', 'Never learned to swim'],
+  backgrounds: ['Grew up in a small town', 'Recently changed careers', 'Just moved to the city']
+};
 }
 
 // Advanced Bot Response System
@@ -236,17 +238,21 @@ function getRandomElements(array, count) {
 }
 
 function generateRandomIdentity() {
-  const name = getRandomElement(traitsData.names) + '_' + Math.floor(Math.random() * 9999);
+  const name = getRandomElement(traitsData.names) + Math.floor(Math.random() * 999);
   const age = Math.floor(Math.random() * 50) + 18;
   const profession = getRandomElement(traitsData.professions);
-  const personality = getRandomElements(traitsData.personalities, Math.floor(Math.random() * 3) + 1);
+  const hobby = getRandomElement(traitsData.hobbies);
+  const quirk = getRandomElement(traitsData.quirks);
+  const secret = getRandomElement(traitsData.secrets);
   const background = getRandomElement(traitsData.backgrounds);
   
   return {
     name,
     age,
     profession,
-    personality,
+    hobby,
+    quirk,
+    secret,
     background,
     avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${name}`
   };

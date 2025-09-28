@@ -36,13 +36,15 @@ const Homepage = ({ onEnterChat, identity, setIdentity }) => {
       
       // Fallback mock identity
       const mockIdentity = {
-        name: "CyberPhantom_" + Math.floor(Math.random() * 9999),
-        age: Math.floor(Math.random() * 50) + 18,
-        profession: "Digital Nomad",
-        personality: ["Mysterious", "Tech-savvy", "Rebellious"],
-        background: "A shadow in the digital realm, navigating the endless streams of data.",
-        avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${Math.random()}`
-      };
+  name: "Alex_Thompson" + Math.floor(Math.random() * 999),
+  age: Math.floor(Math.random() * 50) + 18,
+  profession: "Software Developer",
+  hobby: "Playing guitar",
+  quirk: "Always wears mismatched socks",
+  secret: "Still sleeps with a nightlight",
+  background: "Recently moved to the city for work and trying to make new friends.",
+  avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${Math.random()}`
+};
       setIdentity(mockIdentity);
     }
     
@@ -200,36 +202,47 @@ neuralNetwork.start();`}
 
         {/* Identity preview */}
         {identity && (
-          <div className="bg-black bg-opacity-90 border-2 border-green-500 p-6 max-w-lg w-full mx-4 text-green-400 font-mono shadow-lg">
-            <h3 className="text-green-500 text-xl mb-4 text-center neon-glow">
-              YOUR DIGITAL MASK
-            </h3>
-            <div className="space-y-3 text-sm">
-              <div>
-                <span className="text-green-300 font-bold">NAME:</span> 
-                <span className="ml-2">{identity.name}</span>
-              </div>
-              <div>
-                <span className="text-green-300 font-bold">AGE:</span> 
-                <span className="ml-2">{identity.age}</span>
-              </div>
-              <div>
-                <span className="text-green-300 font-bold">ROLE:</span> 
-                <span className="ml-2">{identity.profession}</span>
-              </div>
-              <div>
-                <span className="text-green-300 font-bold">TRAITS:</span> 
-                <span className="ml-2">{identity.personality?.join(', ')}</span>
-              </div>
-              <div className="mt-4 pt-3 border-t border-green-600">
-                <span className="text-green-300 font-bold">BACKGROUND:</span>
-                <div className="mt-2 text-xs leading-relaxed text-green-400">
-                  {identity.background}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+  <div className="bg-black bg-opacity-90 border-2 border-green-500 p-6 max-w-lg w-full mx-4 text-green-400 font-mono shadow-lg">
+    <h3 className="text-green-500 text-xl mb-4 text-center neon-glow">
+      YOUR IDENTITY
+    </h3>
+    <div className="space-y-3 text-sm">
+      <div>
+        <span className="text-green-300 font-bold">NAME:</span> 
+        <span className="ml-2">{identity.name}</span>
+      </div>
+      <div>
+        <span className="text-green-300 font-bold">AGE:</span> 
+        <span className="ml-2">{identity.age}</span>
+      </div>
+      <div>
+        <span className="text-green-300 font-bold">PROFESSION:</span> 
+        <span className="ml-2">{identity.profession}</span>
+      </div>
+      <div>
+        <span className="text-green-300 font-bold">HOBBY:</span> 
+        <span className="ml-2">{identity.hobby}</span>
+      </div>
+      <div>
+        <span className="text-green-300 font-bold">QUIRK:</span> 
+        <span className="ml-2 text-xs">{identity.quirk}</span>
+      </div>
+      <div className="pt-2 border-t border-green-600">
+        <span className="text-green-300 font-bold">SECRET:</span>
+        <div className="mt-1 text-xs leading-relaxed text-red-400 italic">
+          {identity.secret}
+        </div>
+      </div>
+      <div className="pt-2 border-t border-green-600">
+        <span className="text-green-300 font-bold">BACKGROUND:</span>
+        <div className="mt-2 text-xs leading-relaxed text-green-400">
+          {identity.background}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
         {/* Footer tags */}
         <div className="mt-12 flex flex-wrap items-center justify-center space-x-4 text-yellow-500 text-sm font-mono">
