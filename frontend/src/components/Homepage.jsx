@@ -206,6 +206,15 @@ neuralNetwork.start();`}
     <h3 className="text-green-500 text-xl mb-4 text-center neon-glow">
       YOUR IDENTITY
     </h3>
+    
+    <IdentityTimer 
+      identity={identity} 
+      onExpired={() => {
+        setIdentityExpired(true);
+        setIdentity(null);
+      }} 
+    />
+    
     <div className="space-y-3 text-sm">
       <div>
         <span className="text-green-300 font-bold">NAME:</span> 
@@ -239,9 +248,23 @@ neuralNetwork.start();`}
           {identity.background}
         </div>
       </div>
+      
+      {/* Expiration info */}
+      <div className="pt-2 border-t border-yellow-600 text-center">
+        <span className="text-yellow-300 font-bold text-xs">CREATED:</span>
+        <div className="text-yellow-400 text-xs">
+          {new Date(identity.createdAt).toLocaleString()}
+        </div>
+        <span className="text-yellow-300 font-bold text-xs">EXPIRES:</span>
+        <div className="text-yellow-400 text-xs">
+          {new Date(identity.expiresAt).toLocaleString()}
+        </div>
+      </div>
     </div>
   </div>
 )}
+
+
 
 
         {/* Footer tags */}
@@ -259,5 +282,43 @@ neuralNetwork.start();`}
     </div>
   );
 };
+const IdentityTimer = ({ identity, onExpired }) => {
+  const [timeRemaining, setTimeRemaining] = useState('24h 0m');
 
+  useEffect(() => {
+    if (!identity) return;
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const remaining = identity.expiresAt - now;
+      
+      if (remaining <= 0) {
+        setTimeRemaining('EXPIRED');
+        onExpired();
+        return;
+      }
+      
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+      const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+      
+      setTimeRemaining(`${hours}h ${minutes}m`);
+    };
+
+    // Update immediately
+    updateTimer();
+    
+    // Update every minute
+    const interval = setInterval(updateTimer, 60000);
+    
+    return () => clearInterval(interval);
+  }, [identity, onExpired]);
+
+  if (!identity) return null;
+
+  return (
+    <div className="text-center text-sm text-yellow-400 font-mono mb-4">
+      ⏰ Identity expires in: <span className="font-bold text-yellow-300">{timeRemaining}</span>
+    </div>
+  );
+};
 export default Homepage;

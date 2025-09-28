@@ -1,59 +1,126 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Users, Send, Shuffle, ArrowLeft, User, MessageSquare } from 'lucide-react';
+// Complete frontend/src/components/Chatroom.jsx - Fixed version
 
-const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
+import React, { useState, useEffect, useRef } from 'react';
+import { Users, Send, Shuffle, ArrowLeft, User, Clock } from 'lucide-react';
+
+const Chatroom = ({ socket, identity, onBack, onNewIdentity, onIdentityExpired }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [connectedUsers, setConnectedUsers] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState('24h 0m');
   const chatEndRef = useRef(null);
-  const messagesContainerRef = useRef(null);
 
+  // FIXED: Clean socket event handling
   useEffect(() => {
     if (!socket) return;
 
-    // Socket event listeners
-    socket.on('new-message', (message) => {
-      setMessages(prev => [...prev, {
-        ...message,
-        isOwn: message.socketId === socket.id
-      }]);
-    });
+    console.log('🔌 Setting up socket listeners...');
 
-    socket.on('user-joined', (data) => {
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        user: 'SYSTEM',
-        text: data.message,
-        timestamp: new Date().toLocaleTimeString(),
-        isSystem: true
-      }]);
-      setConnectedUsers(data.userCount);
-    });
+    // Remove any existing listeners first
+    socket.off('new-message');
+    socket.off('user-joined');
+    socket.off('user-left');
+    socket.off('user-count');
+    socket.off('identity-expired');
 
-    socket.on('user-left', (data) => {
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        user: 'SYSTEM',
-        text: data.message,
-        timestamp: new Date().toLocaleTimeString(),
-        isSystem: true
-      }]);
-      setConnectedUsers(data.userCount);
-    });
-
-    socket.on('user-count', (count) => {
-      setConnectedUsers(count);
-    });
-
-    // Cleanup
-    return () => {
-      socket.off('new-message');
-      socket.off('user-joined');
-      socket.off('user-left');
-      socket.off('user-count');
+    // Set up fresh listeners
+    const handleNewMessage = (message) => {
+      console.log('📨 Received message:', message);
+      
+      setMessages(prev => {
+        // Check if message already exists (prevent duplicates)
+        const existsAlready = prev.some(msg => msg.id === message.id);
+        if (existsAlready) {
+          console.log('⚠️ Duplicate message detected, skipping');
+          return prev;
+        }
+        
+        // Determine if it's our own message
+        const isOwn = message.socketId === socket.id;
+        
+        return [...prev, {
+          ...message,
+          isOwn
+        }];
+      });
     };
-  }, [socket]);
+
+    const handleUserJoined = (data) => {
+      setMessages(prev => [...prev, {
+        id: Date.now() + Math.random(),
+        user: 'SYSTEM',
+        text: data.message,
+        timestamp: new Date().toLocaleTimeString(),
+        isSystem: true
+      }]);
+      setConnectedUsers(data.userCount);
+    };
+
+    const handleUserLeft = (data) => {
+      setMessages(prev => [...prev, {
+        id: Date.now() + Math.random(),
+        user: 'SYSTEM',
+        text: data.message,
+        timestamp: new Date().toLocaleTimeString(),
+        isSystem: true
+      }]);
+      setConnectedUsers(data.userCount);
+    };
+
+    const handleUserCount = (count) => {
+      setConnectedUsers(count);
+    };
+
+    const handleIdentityExpired = () => {
+      console.log('⏰ Identity expired');
+      onIdentityExpired();
+    };
+
+    // Attach listeners
+    socket.on('new-message', handleNewMessage);
+    socket.on('user-joined', handleUserJoined);
+    socket.on('user-left', handleUserLeft);
+    socket.on('user-count', handleUserCount);
+    socket.on('identity-expired', handleIdentityExpired);
+
+    // Cleanup function
+    return () => {
+      console.log('🧹 Cleaning up socket listeners...');
+      socket.off('new-message', handleNewMessage);
+      socket.off('user-joined', handleUserJoined);
+      socket.off('user-left', handleUserLeft);
+      socket.off('user-count', handleUserCount);
+      socket.off('identity-expired', handleIdentityExpired);
+    };
+  }, [socket, onIdentityExpired]);
+
+  // Timer updates
+  useEffect(() => {
+    if (!identity) return;
+
+    const updateTimer = () => {
+      if (!identity.expiresAt) return;
+      
+      const now = Date.now();
+      const remaining = identity.expiresAt - now;
+      
+      if (remaining <= 0) {
+        setTimeRemaining('EXPIRED');
+        onIdentityExpired();
+        return;
+      }
+      
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+      const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+      setTimeRemaining(`${hours}h ${minutes}m`);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 60000);
+    
+    return () => clearInterval(interval);
+  }, [identity, onIdentityExpired]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,14 +130,25 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
     scrollToBottom();
   }, [messages]);
 
+  // FIXED: Simple message sending
   const sendMessage = () => {
-    if (newMessage.trim() && socket && identity) {
-      socket.emit('send-message', {
-        text: newMessage,
-        timestamp: new Date().toISOString()
-      });
-      setNewMessage('');
+    if (!newMessage.trim() || !socket || !identity) return;
+
+    // Check if identity expired
+    if (identity.expiresAt && Date.now() > identity.expiresAt) {
+      onIdentityExpired();
+      return;
     }
+
+    console.log('📤 Sending message:', newMessage);
+
+    // ONLY emit to server - don't add to local state
+    socket.emit('send-message', {
+      text: newMessage,
+      timestamp: new Date().toISOString()
+    });
+    
+    setNewMessage('');
   };
 
   const handleKeyPress = (e) => {
@@ -85,35 +163,20 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
     
     try {
       const response = await fetch('http://localhost:5000/api/generate-identity');
-      if (!response.ok) {
-        throw new Error('Failed to generate identity');
-      }
       const data = await response.json();
       onNewIdentity(data);
       
-      // Rejoin chat with new identity
-      socket.emit('join-chat', data);
-      
+      if (socket) {
+        socket.emit('join-chat', data);
+      }
     } catch (error) {
       console.error('Error generating identity:', error);
-      
-      // Fallback mock identity
-      const mockIdentity = {
-        name: "CyberPhantom_" + Math.floor(Math.random() * 9999),
-        age: Math.floor(Math.random() * 50) + 18,
-        profession: "Digital Nomad",
-        personality: ["Mysterious", "Tech-savvy", "Rebellious"],
-        background: "A shadow in the digital realm, navigating the endless streams of data.",
-        avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${Math.random()}`
-      };
-      onNewIdentity(mockIdentity);
-      socket.emit('join-chat', mockIdentity);
     }
     
-    setTimeout(() => {
-      setIsGenerating(false);
-    }, 1500);
+    setTimeout(() => setIsGenerating(false), 1500);
   };
+
+  const isExpiringSoon = identity && identity.expiresAt && (identity.expiresAt - Date.now()) < (60 * 60 * 1000);
 
   return (
     <div className="min-h-screen bg-black text-green-500 font-mono flex flex-col">
@@ -122,14 +185,19 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
         <div className="flex items-center space-x-4">
           <button
             onClick={onBack}
-            className="text-green-500 hover:text-green-300 transition-colors flex items-center space-x-2 p-2 border border-green-500 hover:border-green-300"
+            className="text-green-500 hover:text-green-300 transition-colors flex items-center space-x-2 p-2 border border-green-500"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">EXIT</span>
           </button>
-          <h1 className="text-xl md:text-2xl font-bold neon-glow">
-            NEURAL_CHATROOM
-          </h1>
+          <h1 className="text-xl md:text-2xl font-bold">NEURAL_CHATROOM</h1>
+          
+          <div className={`hidden md:flex items-center space-x-1 text-sm px-2 py-1 border ${
+            isExpiringSoon ? 'text-red-400 border-red-500 animate-pulse' : 'text-yellow-400 border-yellow-500'
+          }`}>
+            <Clock className="h-3 w-3" />
+            <span>{timeRemaining}</span>
+          </div>
         </div>
         
         <div className="flex items-center space-x-4 text-sm">
@@ -137,82 +205,45 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
             <Users className="h-4 w-4" />
             <span>{connectedUsers} ONLINE</span>
           </div>
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Identity sidebar */}
-        <div className="w-80 bg-black border-r-2 border-green-500 p-4 flex-shrink-0 overflow-y-auto hidden lg:block">
-          <div className="mb-6">
-            <h3 className="text-green-500 text-lg mb-4 flex items-center">
-              <User className="mr-2 h-5 w-5" />
-              YOUR MASK
-            </h3>
-            {identity && (
-              <div className="bg-black border-2 border-green-500 p-4 text-sm space-y-3">
-                <div>
-                  <span className="text-green-300 font-bold">ID:</span>
-                  <div className="text-green-400 ml-2">{identity.name}</div>
-                </div>
-                <div>
-                  <span className="text-green-300 font-bold">AGE:</span>
-                  <div className="text-green-400 ml-2">{identity.age}</div>
-                </div>
-                <div>
-                  <span className="text-green-300 font-bold">ROLE:</span>
-                  <div className="text-green-400 ml-2">{identity.profession}</div>
-                </div>
-                <div>
-                  <span className="text-green-300 font-bold">TRAITS:</span>
-                  <div className="ml-2">
-                    {identity.personality?.map((trait, i) => (
-                      <div key={i} className="text-green-400 text-xs">• {trait}</div>
-                    ))}
-                  </div>
-                </div>
-                <div className="pt-2 border-t border-green-600">
-                  <span className="text-green-300 font-bold text-xs">BACKGROUND:</span>
-                  <div className="mt-2 text-xs leading-relaxed text-green-400">
-                    {identity.background}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+        {/* Identity sidebar - simplified */}
+        <div className="w-80 bg-black border-r-2 border-green-500 p-4 hidden lg:block">
+          <h3 className="text-green-500 text-lg mb-4 flex items-center">
+            <User className="mr-2 h-5 w-5" />
+            YOUR IDENTITY
+          </h3>
+          
+          {identity && (
+            <div className="bg-black border-2 border-green-500 p-4 text-sm space-y-2">
+              <div><span className="text-green-300 font-bold">NAME:</span> {identity.name}</div>
+              <div><span className="text-green-300 font-bold">AGE:</span> {identity.age}</div>
+              <div><span className="text-green-300 font-bold">JOB:</span> {identity.profession}</div>
+              <div><span className="text-green-300 font-bold">HOBBY:</span> {identity.hobby}</div>
+              <div><span className="text-red-300 font-bold">SECRET:</span> <span className="text-red-400 italic">{identity.secret}</span></div>
+            </div>
+          )}
 
           <button
             onClick={generateNewIdentity}
             disabled={isGenerating}
-            className="w-full bg-transparent border-2 border-green-500 text-green-500 py-3 px-4 hover:bg-green-500 hover:text-black transition-all duration-200 text-sm disabled:opacity-50 font-mono"
+            className="w-full mt-4 bg-transparent border-2 border-green-500 text-green-500 py-2 px-4 hover:bg-green-500 hover:text-black transition-all duration-200"
           >
-            {isGenerating ? (
-              <span className="flex items-center justify-center">
-                <Shuffle className="animate-spin mr-2 h-4 w-4" />
-                RESHUFFLING...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center">
-                <Shuffle className="mr-2 h-4 w-4" />
-                NEW IDENTITY
-              </span>
-            )}
+            {isGenerating ? 'GENERATING...' : 'NEW IDENTITY'}
           </button>
         </div>
 
         {/* Chat area */}
         <div className="flex-1 flex flex-col">
           {/* Messages */}
-          <div 
-            ref={messagesContainerRef}
-            className="flex-1 overflow-y-auto p-4 space-y-4"
-            style={{ maxHeight: 'calc(100vh - 140px)' }}
-          >
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.length === 0 && (
               <div className="text-center text-green-300 mt-20">
                 <div className="mb-4 text-4xl">👁️</div>
                 <div className="text-lg mb-2">The neural network awaits...</div>
-                <div className="text-sm opacity-75">Start the conversation and let chaos unfold</div>
+                <div className="text-sm opacity-75">Start the conversation</div>
               </div>
             )}
             
@@ -231,7 +262,7 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
                       <span>{msg.timestamp}</span>
                     </div>
                   )}
-                  <div className={msg.isSystem ? 'text-center' : ''}>{msg.text}</div>
+                  <div>{msg.text}</div>
                 </div>
               </div>
             ))}
@@ -253,38 +284,12 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
               <button
                 onClick={sendMessage}
                 disabled={!newMessage.trim()}
-                className="bg-green-500 text-black px-6 py-3 hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-2 border-green-500 font-mono font-bold"
+                className="bg-green-500 text-black px-6 py-3 hover:bg-green-400 transition-colors disabled:opacity-50 border-2 border-green-500 font-mono font-bold"
               >
                 <Send className="h-5 w-5" />
               </button>
             </div>
-            <div className="mt-2 text-xs text-green-600 font-mono">
-              {newMessage.length}/500 characters • Press Enter to send
-            </div>
           </div>
-        </div>
-
-        {/* Mobile identity panel */}
-        <div className="lg:hidden fixed top-16 right-4 bg-black border-2 border-green-500 p-3 text-xs max-w-xs z-10">
-          {identity && (
-            <>
-              <div className="text-green-500 font-bold mb-2 flex items-center">
-                <User className="mr-1 h-3 w-3" />
-                MASK
-              </div>
-              <div className="space-y-1">
-                <div><span className="text-green-300">ID:</span> {identity.name}</div>
-                <div><span className="text-green-300">ROLE:</span> {identity.profession}</div>
-              </div>
-              <button
-                onClick={generateNewIdentity}
-                disabled={isGenerating}
-                className="w-full mt-2 bg-transparent border border-green-500 text-green-500 py-1 px-2 hover:bg-green-500 hover:text-black transition-all duration-200 text-xs"
-              >
-                {isGenerating ? 'RESHUFFLING...' : 'NEW'}
-              </button>
-            </>
-          )}
         </div>
       </div>
     </div>
@@ -292,5 +297,3 @@ const Chatroom = ({ socket, identity, onBack, onNewIdentity }) => {
 };
 
 export default Chatroom;
-
-

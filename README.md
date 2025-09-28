@@ -34,7 +34,7 @@ No profile pics. No bios. Just masks, chaos, and roleplay.
 ### 2. Setup backend
 - cd backend
 - npm install
-- node server.js
+- npm run dev
 
 
 - Backend runs on 👉 http://localhost:5000
@@ -50,22 +50,36 @@ No profile pics. No bios. Just masks, chaos, and roleplay.
 ## 🧩 File Structure
 ``` 
 RoleRoulette/
-│
-├── backend/             
+├── README.md
+├── backend/
+│   ├── node_modules/
+│   ├── package-lock.json
+│   ├── package.json
 │   ├── server.js
-│   └── traits.json       
-│
-├── frontend/             
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── components/
-│   │   │   ├── IdentityCard.jsx
-│   │   │   └── ChatRoom.jsx
-│   │   └── styles/
-│   │       └── index.css
-│   └── vite.config.js
-│
-└── README.md
+│   └── traits.json
+├── frontend/
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── node_modules/
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── vite.config.js
+│   ├── public/
+│   │   ├── hackerterminal.png
+│   │   └── vite.svg
+│   └── src/
+│       ├── App.css
+│       ├── App.jsx
+│       ├── index.css
+│       ├── main.jsx
+│       ├── assets/
+│       │   └── react.svg
+│       └── components/
+│           ├── Chatroom.jsx
+│           └── Homepage.jsx
 ```
 
 ## 🧪 Hypothesis
@@ -86,3 +100,7 @@ RoleRoulette/
 - Try new identity categories (e.g., “phobia,” “catchphrase”)
 
 - Fork, PR, or drop your own wild identity experiments.
+
+- Imrove the chatroom to include real users from around the world
+
+- Add a database to store identities 
