@@ -45,7 +45,7 @@ No profile pics. No bios. Just masks, chaos, and roleplay.
 - npm run dev
 
 
-- Frontend runs on 👉 http://localhost:5173
+- Frontend runs on 👉 http://localhost:3000
 
 ## 🧩 File Structure
 ``` 
