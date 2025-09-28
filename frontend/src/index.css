@@ -35,3 +35,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #00cc00;
 }
+.text-shadow-strong {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.neon-glow-strong {
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00, 2px 2px 8px rgba(0, 0, 0, 0.8);
+}

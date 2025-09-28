@@ -64,7 +64,17 @@ const Homepage = ({ onEnterChat, identity, setIdentity }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black overflow-hidden relative">
+    <div 
+  className="min-h-screen bg-black overflow-hidden relative"
+  style={{
+    backgroundImage: 'url("/hackerterminal.png")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
+  }}
+  
+>
+  <div className="absolute inset-0 bg-black bg-opacity-60"></div>
       {/* Matrix rain background */}
       <div className="absolute inset-0 opacity-10">
         {matrixChars.map((char, i) => (
@@ -137,12 +147,12 @@ neuralNetwork.start();`}
         </pre>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4">
         {/* Main title */}
         <div className="mb-8">
-          <h1 className="text-6xl md:text-8xl font-bold text-green-500 tracking-wider mb-4 text-center font-mono neon-glow">
-            ROLE ROULETTE
-          </h1>
+          <h1 className="text-6xl md:text-8xl font-bold text-green-400 tracking-wider mb-4 text-center font-mono neon-glow bg-black bg-opacity-50 px-8 py-4 border-2 border-green-500">
+  ROLE ROULETTE
+</h1>
           <div className="flex items-center justify-center space-x-2 text-green-400 mb-8">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-lg md:text-xl">Who are you, really?</span>
@@ -151,7 +161,7 @@ neuralNetwork.start();`}
         </div>
 
         {/* Description */}
-        <div className="max-w-3xl text-center mb-12 text-green-300 text-lg md:text-xl leading-relaxed font-mono px-4">
+        <div className="max-w-3xl text-center mb-12 text-green-300 text-lg md:text-xl leading-relaxed font-mono px-6 py-4 bg-black bg-opacity-70 border border-green-500">
           A social experiment where you don't play yourself. Get assigned a 
           random identity and drop into a neon-lit chatroom. No bios. No 
           profiles. Just masks, chaos, and pure roleplay.
