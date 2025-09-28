@@ -141,7 +141,7 @@ neuralNetwork.start();`}
         {/* Main title */}
         <div className="mb-8">
           <h1 className="text-6xl md:text-8xl font-bold text-green-500 tracking-wider mb-4 text-center font-mono neon-glow">
-            ROLEROULETTE
+            ROLE ROULETTE
           </h1>
           <div className="flex items-center justify-center space-x-2 text-green-400 mb-8">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>

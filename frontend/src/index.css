@@ -1,83 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* custom utilities */
-@layer utilities {
-  .neon-glow {
-    text-shadow: 0 0 6px #00ff66, 0 0 14px #00ff66, 0 0 30px #00ff66;
-  }
 
-  .glitch {
-    position: relative;
-    display: inline-block;
-    color: #9eff9e;
-    animation: glitch-skew 2s infinite linear alternate-reverse;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    overflow: hidden;
-    clip: rect(0, 9999px, 0, 0);
-  }
-  .glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 #ff00ff;
-    animation: glitch-anim 2s infinite linear alternate-reverse;
-  }
-  .glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 #00ffff;
-    animation: glitch-anim2 3s infinite linear alternate-reverse;
-  }
+body {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  background-color: #000000;
+  color: #00ff00;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-  @keyframes glitch-anim {
-    0% { clip: rect(0, 9999px, 0, 0); }
-    10% { clip: rect(10px, 9999px, 50px, 0); }
-    20% { clip: rect(80px, 9999px, 120px, 0); }
-    30% { clip: rect(40px, 9999px, 90px, 0); }
-    40% { clip: rect(70px, 9999px, 100px, 0); }
-    100% { clip: rect(0, 9999px, 0, 0); }
-  }
-  @keyframes glitch-anim2 {
-    0% { clip: rect(0, 9999px, 0, 0); }
-    10% { clip: rect(20px, 9999px, 60px, 0); }
-    20% { clip: rect(50px, 9999px, 100px, 0); }
-    30% { clip: rect(30px, 9999px, 80px, 0); }
-    40% { clip: rect(90px, 9999px, 120px, 0); }
-    100% { clip: rect(0, 9999px, 0, 0); }
-  }
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-  @keyframes glitch-skew {
-    0% { transform: skew(0deg); }
-    50% { transform: skew(1deg); }
-    100% { transform: skew(-1deg); }
-  }
+::-webkit-scrollbar-track {
+  background: #000000;
+}
 
-  .matrix-bg {
-    background-image:
-      linear-gradient(rgba(0,255,0,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,0,0.06) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
+::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 4px;
+}
 
-  .scanline {
-    background-image: linear-gradient(
-      rgba(0,0,0,0) 50%,
-      rgba(0,255,0,0.015) 50%
-    );
-    background-size: 100% 4px;
-  }
-
-  .blink {
-    animation: blink 1s steps(2, start) infinite;
-  }
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
 }
